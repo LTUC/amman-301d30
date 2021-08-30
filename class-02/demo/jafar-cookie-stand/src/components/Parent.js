@@ -1,6 +1,5 @@
 import React from 'react';
 import Child from './Child';
-import jafarImage from '../assets/jafar.jpg';
 
 
 class Parent extends React.Component {
