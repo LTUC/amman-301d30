@@ -9,7 +9,6 @@ class Parent extends React.Component {
     return (
       <div>
         <h2>I am Jafar the Parent</h2>
-        <img src={jafarImage} alt="" />
         <Child
           name="Iago"
         />

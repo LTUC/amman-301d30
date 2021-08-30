@@ -1,5 +1,7 @@
 import React from 'react';
-
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import jafarImage from '../assets/jafar.jpg';
 class Child extends React.Component {
   /**
    * TODO:
@@ -34,11 +36,17 @@ class Child extends React.Component {
   render() {
     return (
       <div>
-        <h3>I am the Child name {this.props.name}</h3>
-        <p>number of cookies eaten {this.state.cookieEaten} </p>
-        <button onClick={this.increaseNumberOfCookiesEaten}>
-          I want more cookies!
-        </button>
+        {/* Bootstrap */}
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src={jafarImage} />
+          <Card.Body>
+            <Card.Title>I am the Child name {this.props.name}</Card.Title>
+            <Card.Text>
+              number of cookies eaten {this.state.cookieEaten}
+            </Card.Text>
+            <Button onClick={this.increaseNumberOfCookiesEaten}> I want more cookies!</Button>
+          </Card.Body>
+        </Card>
       </div>
     );
   }
