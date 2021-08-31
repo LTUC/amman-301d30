@@ -3,14 +3,6 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import jafarImage from '../assets/jafar.jpg';
 class Child extends React.Component {
-  /**
-   * TODO:
-   * 1 - we need to set an initial value in our constructor to how many number of cookies eaten by the child (state) - DONE
-   * 
-   * 2 - We want a button to request more cookies 
-   * 3 - The moment the button is clicked the number of cookie eaten will increase (event)
-   * 
-   */
 
   constructor(props) {
     super(props); // to pass down the values that need to be initialized in the inherited class
@@ -28,12 +20,14 @@ class Child extends React.Component {
       cookieEaten: this.state.cookieEaten + 1
     });
 
-    // alert(`button clicked ${this.state.cookieEaten}`);
-
+    // the child here calls the function from the parent component that was passed down as a prop
+    // this.props.showAlertMessage(this.state.cookieEaten);
+    this.props.handleClose();
   }
 
 
   render() {
+    console.log(this.props)
     return (
       <div>
         {/* Bootstrap */}
