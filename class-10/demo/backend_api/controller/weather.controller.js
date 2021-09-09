@@ -23,6 +23,7 @@ console.log('================');
  * 2 - if the cache has any forecast data, then send the data from the cache 
  *    - check if teh cache has the lat and lon location
  *    - if it has it, then return that data from the cache directly 
+ * 3- We want to delete the cache passing one day
  */
 
 
@@ -37,8 +38,17 @@ const getWeather = async (request, response) => {
   console.log('Check If cache has any forcast data');
   console.log('================');
 
-  const foundData = cacheObject.foreCast.find(location => location.lat === lat && location.lon === lon);
 
+  const dayInMilSec = 86400000;
+  const oneDayPassed = (Date.now() - cacheObject.timeStamp) > dayInMilSec;
+  if (oneDayPassed) {
+    console.log('================');
+    console.log('Cache Reset');
+    console.log('================');
+    cacheObject = new Cache();
+  }
+
+  const foundData = cacheObject.foreCast.find(location => location.lat === lat && location.lon === lon);
   if (foundData) { // check if the Cache has any foreCast data
     response.json(foundData.data);
   } else {
@@ -80,11 +90,6 @@ const getWeather = async (request, response) => {
     } catch (error) {
       return error
     }
-
-
-
-
-    // in order to send a request with axios, we need a URL for weatherbit
   }
 }
 
