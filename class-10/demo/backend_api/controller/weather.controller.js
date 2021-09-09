@@ -6,6 +6,25 @@ const axios = require('axios');
 require('dotenv').config();
 const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 const Forecast = require('../models/weather.model');
+const Cache = require('../helper/cache.helper');
+let cacheObject = new Cache(); // the moment the server starts an instance of cache will be created
+
+console.log('================');
+console.log('Cache instance created');
+console.log('================');
+
+/** TODO:
+ * 
+ * 1- we want to cache the data only when we dont have that data in our cache
+ *    - check if the cache has the lat and lon location saved
+ *    - if not then request the data from weatherBit
+ *    - after you get a response, save the modeled data into the cache
+ *    - Send the data to the user
+ * 2 - if the cache has any forecast data, then send the data from the cache 
+ *    - check if teh cache has the lat and lon location
+ *    - if it has it, then return that data from the cache directly 
+ */
+
 
 const getWeather = async (request, response) => {
   // const lat = request.query.lat;
@@ -14,27 +33,59 @@ const getWeather = async (request, response) => {
   // destructing assignment
   const { lon, lat } = request.query;
 
-  const weatherBitUrl = 'https://api.weatherbit.io/v2.0/forecast/daily';
-  try {
+  console.log('================');
+  console.log('Check If cache has any forcast data');
+  console.log('================');
 
-    const weatherBitResponse = await axios.get(`${weatherBitUrl}?lat=${lat}&lon=${lon}&key=${WEATHER_API_KEY}`);
+  const foundData = cacheObject.foreCast.find(location => location.lat === lat && location.lon === lon);
 
-    // Model the data according to the ticket
-    const data = weatherBitResponse.data.data.map((data1) => {
+  if (foundData) { // check if the Cache has any foreCast data
+    response.json(foundData.data);
+  } else {
+    console.log('No Cache data found');
+    console.log('================');
+    const weatherBitUrl = 'https://api.weatherbit.io/v2.0/forecast/daily';
+    try {
 
-      return new Forecast(
-        `Low of ${data1.low_temp}, high of ${data1.high_temp} with ${data1.weather.description} `,
-        ` ${data1.datetime}`
-      );
-    });
+      const weatherBitResponse = await axios.get(`${weatherBitUrl}?lat=${lat}&lon=${lon}&key=${WEATHER_API_KEY}`);
 
-    response.json(data);
-  } catch (error) {
-    response.json(error.data);
+      // Model the data according to the ticket
+      const data = weatherBitResponse.data.data.map((data1) => {
+
+        return new Forecast(
+          `Low of ${data1.low_temp}, high of ${data1.high_temp} with ${data1.weather.description} `,
+          ` ${data1.datetime}`
+        );
+      });
+
+      /**
+       * save the data in the cache
+       */
+
+      console.log('================');
+      console.log('Save data into cache');
+      console.log('================');
+
+      cacheObject.foreCast.push({
+        "lat": lat,
+        "lon": lon,
+        "data": data
+      });
+      console.log('================');
+      console.log(cacheObject);
+      console.log('================');
+
+      response.json(data);
+
+    } catch (error) {
+      return error
+    }
+
+
+
+
+    // in order to send a request with axios, we need a URL for weatherbit
   }
-
-
-  // in order to send a request with axios, we need a URL for weatherbit
 }
 
 module.exports = getWeather;

@@ -8,7 +8,7 @@ export class App extends Component {
       locationName: '',
       locationData: {},
       showLocationData: false,
-      groceriesList: []
+      weatherData: []
     }
   }
 
@@ -21,25 +21,31 @@ export class App extends Component {
     console.log(this.state.locationName);
 
 
-    const url = `https://eu1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&q=${this.state.locationName}&format=json`;
+    const locationIqUrl = `https://eu1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATION_IQ_KEY}&q=${this.state.locationName}&format=json`;
 
-    const serverUrl = `${process.env.REACT_APP_SERVER_URL}/get-groceries?type=fruit`;
 
-    console.log(url);
 
-    const response = await axios.get(url);
-    // axios is  promise
-    // promises are JS async functions
-    // async functions are function that work in the backend and they dont wait for the line or the function to finish executing 
+    // console.log(locationIqUrl);
 
-    const serverResponse = await axios.get(serverUrl);
+    axios.get(locationIqUrl).then(locationIqResponse => {
 
-    console.log(response.data[0]);
-    console.log(serverResponse.data);
-    this.setState({
-      locationData: response.data[0],
-      showLocationData: true,
-      groceriesList: serverResponse.data
+      const locationIqData = locationIqResponse.data[0];
+
+      this.setState({
+        locationData: locationIqData
+      });
+
+      const serverWeatherUrl = `${process.env.REACT_APP_SERVER_URL}/weather?lat=${locationIqData.lat}&lon=${locationIqData.lon}`;
+
+      axios.get(serverWeatherUrl).then(weatherResponse => {
+
+        this.setState({
+          weatherData: weatherResponse.data,
+          showLocationData: true
+        });
+
+      });
+
     });
   }
 
@@ -62,12 +68,11 @@ export class App extends Component {
 
             <div>
               {
-                this.state.groceriesList.map((item) => {
+                this.state.weatherData.map((weather) => {
                   return (
                     <div>
-                      <p>{item.name}</p>
-                      <p>{item.type}</p>
-                      <p>{item.icon}</p>
+                      <p>{weather.description}</p>
+                      <p>{weather.date}</p>
                     </div>
                   )
                 })
