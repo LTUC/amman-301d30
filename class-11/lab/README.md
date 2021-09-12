@@ -43,7 +43,7 @@ Your instructor will supply you with a link to the Trello board for you to copy 
 ## Workflow
 
 - We will be using the [Trello](https://trello.com/home){:target="_blank"} project management tool for the duration of this project.
-- After signing in to your account, go to the Can of Books Trello board at link provided, open the "... Show Menu" link, click the "... More" link, and then click "Copy Board".
+- After signing in to your account, go to the [Can of Books Trello board](https://trello.com/b/OQdPq0st/can-of-books-module-3) at link provided, open the "... Show Menu" link, click the "... More" link, and then click "Copy Board".
 - Before you create it, be sure to "Change" from Private to "Public" (and click "Yes, Make Board Public") so your instructional team can see your work. Now, click "Create" to add a copy to your personal account.
 - This Trello board contains all of the features required to complete each lab assignment.
 - In the "...Show Menu" sidebar, click the "Search Cards" link and filter by lab to see the assignment for just the current day.
