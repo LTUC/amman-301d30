@@ -16,7 +16,6 @@ app.use(express.json()); // checkpoint #2
 
 const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
-const DB_NAME = process.env.DB_NAME;
 
 /**
  * we are using mongoose package/ library to connect to 

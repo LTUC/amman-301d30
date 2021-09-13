@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import AddCat from './AddCat';
+import UpdateCat from './UpdateCat';
 
 export class Cats extends Component {
 
@@ -11,6 +12,7 @@ export class Cats extends Component {
     this.state = {
       catsData: [],
       showAddModal: false,
+      showUpdateModal: false,
     }
 
   }
@@ -39,6 +41,13 @@ export class Cats extends Component {
       this.setState({ catsData: this.state.catsData }); // update the data using setState to invoke the re-render
       this.handelDisplayAddModal(); // close the modal after we are done!
     }).catch(() => alert("Something went wrong!"));
+  }
+  /**
+   * Handel the submit of the Display Modal Form
+   */
+  handelUpdateModal = (e) => {
+    e.preventDefault();
+
   }
 
   /**
@@ -72,6 +81,13 @@ export class Cats extends Component {
  */
   handelDisplayAddModal = () => {
     this.setState({ showAddModal: !this.state.showAddModal });
+  }
+
+  /**
+   * Show/ Hide Update Modal
+   */
+  handelDisplayUpdateModal = () => {
+    this.setState({ showUpdateModal: !this.state.showUpdateModal });
   }
 
   componentDidMount = () => {
@@ -110,6 +126,19 @@ export class Cats extends Component {
         }
         {/* ================================================ */}
 
+        {/* Show/ Hide the Update Cat Modal Form */}
+        {
+          this.state.showAddModal &&
+          <>
+            <UpdateCat
+              show={this.state.showUpdateModal}
+              handelUpdateModal={this.handelUpdateModal}
+              handelDisplayUpdateModal={this.handelDisplayUpdateModal}
+            />
+          </>
+        }
+        {/* ================================================ */}
+
         {/* Render the Cards only when we have data from the Backend */}
         {
           this.state.catsData.length > 0 &&
@@ -127,6 +156,8 @@ export class Cats extends Component {
                           {cat.cat_breed}
                         </Card.Text>
                         <Button variant="danger" onClick={() => this.handelDeleteCat(cat._id)}>Delete Cat</Button>
+                        <br />
+                        <Button variant="warning" onClick={() => this.handelDisplayUpdateModal()}>Update Cat</Button>
                       </Card.Body>
                     </Card>
                   </>
