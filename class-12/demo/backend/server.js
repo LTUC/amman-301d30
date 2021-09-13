@@ -5,7 +5,14 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
-app.use(cors());
+
+/**
+ * Middleware
+ * 
+ * Are basically checkpoints for request to add things to request in order to make sure that the request is handled in a right way
+ */
+app.use(cors()); // checkpoint # 1
+app.use(express.json()); // checkpoint #2
 
 const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
@@ -15,10 +22,14 @@ const DB_NAME = process.env.DB_NAME;
  * we are using mongoose package/ library to connect to 
  * Mongo DB.
   */
-mongoose.connect(`${MONGO_URL}/${DB_NAME}`);
+mongoose.connect(MONGO_URL);
 
 // destructing assignment
-const { getCats } = require('./controllers/cat.controllers');
+const {
+  getCats,
+  createCat,
+  deleteCat
+} = require('./controllers/cat.controllers');
 
 const getIndex = require('./controllers/index.controller');
 
@@ -33,7 +44,9 @@ app.get('/', getIndex);
 /**
  * Cat CRUD API Endpoint
  */
-app.get('/cat', getCats)
+app.get('/cat', getCats); // READ cat Data
+app.post('/cat', createCat); // CREATE cat Data
+app.delete('/cat/:cat_id', deleteCat); // DELETE cat 
 
 
 
