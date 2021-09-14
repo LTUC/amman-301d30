@@ -13,6 +13,7 @@ export class Cats extends Component {
       catsData: [],
       showAddModal: false,
       showUpdateModal: false,
+      selectedCatDataObj: {}
     }
 
   }
@@ -48,6 +49,49 @@ export class Cats extends Component {
   handelUpdateModal = (e) => {
     e.preventDefault();
 
+    const reqBody = {
+      cat_name: e.target.catName.value,
+      cat_breed: e.target.catBreed.value,
+      cat_img: e.target.catImage.value,
+      // _id: this.state.selectedCatDataObj._id
+    };
+
+    axios.put(`${process.env.REACT_APP_API_URL}/cat/${this.state.selectedCatDataObj._id}`, reqBody).then(updatedCatObject => {
+
+      /**
+       * We want to loop through our catsData array state, to find the cat that matches the ID of the cat that was updated
+       * After that we want to update the values for that cat in the state
+       * Then use setState to re-render the component, also, dont forget to reset the selectedCatDataObj = {}
+       */
+
+      const updateCatArr = this.state.catsData.map(cat => {
+        /**
+         * Two things,
+         * make sure to return the original cats that has not been update, so we dont get undefined values
+         * 
+         * As for the ones that you find, that matches the ID of the cat that was updated, the return statment will be within an IF statment 
+         */
+
+        if (cat._id === this.state.selectedCatDataObj._id) {
+          cat = updatedCatObject.data
+
+          return cat;
+        }
+
+        return cat; // we add this to make sure that we dont get undefined values when we dont find a match 
+
+      });
+
+      this.setState({
+        catsData: updateCatArr,
+        selectedCatDataObj: {}
+      })
+
+
+
+      this.handelDisplayUpdateModal(); // hide the update modal
+
+    }).catch(() => alert("Something went wrong!"));
   }
 
   /**
@@ -86,8 +130,11 @@ export class Cats extends Component {
   /**
    * Show/ Hide Update Modal
    */
-  handelDisplayUpdateModal = () => {
-    this.setState({ showUpdateModal: !this.state.showUpdateModal });
+  handelDisplayUpdateModal = (catObj) => {
+    this.setState({
+      showUpdateModal: !this.state.showUpdateModal,
+      selectedCatDataObj: catObj
+    });
   }
 
   componentDidMount = () => {
@@ -128,12 +175,13 @@ export class Cats extends Component {
 
         {/* Show/ Hide the Update Cat Modal Form */}
         {
-          this.state.showAddModal &&
+          this.state.showUpdateModal &&
           <>
             <UpdateCat
               show={this.state.showUpdateModal}
               handelUpdateModal={this.handelUpdateModal}
               handelDisplayUpdateModal={this.handelDisplayUpdateModal}
+              selectedCatDataObj={this.state.selectedCatDataObj}
             />
           </>
         }
@@ -157,7 +205,7 @@ export class Cats extends Component {
                         </Card.Text>
                         <Button variant="danger" onClick={() => this.handelDeleteCat(cat._id)}>Delete Cat</Button>
                         <br />
-                        <Button variant="warning" onClick={() => this.handelDisplayUpdateModal()}>Update Cat</Button>
+                        <Button variant="warning" onClick={() => this.handelDisplayUpdateModal(cat)}>Update Cat</Button>
                       </Card.Body>
                     </Card>
                   </>

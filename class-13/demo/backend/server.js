@@ -12,7 +12,7 @@ require('dotenv').config();
  * Are basically checkpoints for request to add things to request in order to make sure that the request is handled in a right way
  */
 app.use(cors()); // checkpoint # 1
-app.use(express.json()); // checkpoint #2
+app.use(express.json()); // checkpoint #2 used to decode request.body data
 
 const PORT = process.env.PORT;
 const MONGO_URL = process.env.MONGO_URL;
@@ -27,7 +27,8 @@ mongoose.connect(MONGO_URL);
 const {
   getCats,
   createCat,
-  deleteCat
+  deleteCat,
+  updateCat
 } = require('./controllers/cat.controllers');
 
 const getIndex = require('./controllers/index.controller');
@@ -46,6 +47,7 @@ app.get('/', getIndex);
 app.get('/cat', getCats); // READ cat Data
 app.post('/cat', createCat); // CREATE cat Data
 app.delete('/cat/:cat_id', deleteCat); // DELETE cat 
+app.put('/cat/:cat_id', updateCat) // UPDATE Cat Data
 
 
 

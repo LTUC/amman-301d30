@@ -1,5 +1,4 @@
 'use strict';
-
 const catModel = require('../models/cat.model');
 
 
@@ -48,8 +47,26 @@ const deleteCat = (request, response) => {
 
 }
 
+const updateCat = (request, response) => {
+  /**
+   * HTTP PUT methods uses the request body to send/ recieve the data that it needs to update
+   * We can use the PARAMS with the PUT HTTP method to receive the ID of the item/ cat that we want to update
+   */
+
+  const { cat_name, cat_breed, cat_img } = request.body;
+  const catId = request.params.cat_id;
+
+  catModel.findByIdAndUpdate({ _id: catId }, { cat_name, cat_breed, cat_img }, { new: true }, (error, updatedCatData) => {
+
+    response.json(updatedCatData);
+  });
+
+
+}
+
 module.exports = {
   getCats,
   createCat,
-  deleteCat
+  deleteCat,
+  updateCat
 }
