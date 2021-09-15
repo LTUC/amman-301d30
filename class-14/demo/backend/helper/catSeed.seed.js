@@ -11,7 +11,8 @@ const seedCat = () => {
   const firstCat = new catModel({
     cat_name: 'Mishmish',
     cat_breed: 'Orange Tabby',
-    cat_img: "https://pulpbits.net/wp-content/uploads/2014/01/Orange-tabby.jpg"
+    cat_img: "https://pulpbits.net/wp-content/uploads/2014/01/Orange-tabby.jpg",
+    email: 'tamim.hamoudi@gmail.com'
   });
 
   // save the cats data in the DB
@@ -20,7 +21,8 @@ const seedCat = () => {
   const secondCat = new catModel({
     cat_name: 'Boogie',
     cat_breed: 'Calico',
-    cat_img: "https://pixfeeds.com/images/17/442620/1200-484713024-turkish-angora-calico-cat.jpg"
+    cat_img: "https://pixfeeds.com/images/17/442620/1200-484713024-turkish-angora-calico-cat.jpg",
+    email: 'tamim.hamoudi@gmail.com'
   });
 
   secondCat.save();

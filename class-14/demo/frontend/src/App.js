@@ -2,12 +2,15 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import BestCats from './BestCats';
+import Profile from './Profile';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
+import { withAuth0 } from '@auth0/auth0-react';
+import Login from './Login';
 
 class App extends React.Component {
 
@@ -31,15 +34,21 @@ class App extends React.Component {
   }
 
   render() {
+
+    const isAuth = this.props.auth0.isAuthenticated;
+
     return (
       <>
         <Router>
           <Header user={this.state.user} onLogout={this.logoutHandler} />
           <Switch>
             <Route exact path="/">
-              <BestCats />
+              {isAuth ? <BestCats /> : <Login />}
             </Route>
             {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
+            <Route exact path="/profile">
+              {isAuth && <Profile />}
+            </Route>
           </Switch>
           <Footer />
         </Router>
@@ -48,4 +57,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withAuth0(App);

@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import AddCat from './components/AddCat';
 import UpdateCat from './components/UpdateCat';
-
+import { withAuth0 } from '@auth0/auth0-react';
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
@@ -28,6 +28,7 @@ class BestBooks extends React.Component {
       cat_name: e.target.catName.value,
       cat_breed: e.target.catBreed.value,
       cat_img: e.target.catImage.value,
+      emai: this.props.auth0.user.email
     }
     // console.log(reqBody);
 
@@ -145,7 +146,7 @@ class BestBooks extends React.Component {
      * 
      */
 
-    axios.get(`${process.env.REACT_APP_API_URL}/cat`).then((catResponse) => {
+    axios.get(`${process.env.REACT_APP_API_URL}/cat/${this.props.auth0.user.email}`).then((catResponse) => {
 
       this.setState({ catsData: catResponse.data });
     }).catch(error => alert(error.message));
@@ -223,4 +224,4 @@ class BestBooks extends React.Component {
   }
 }
 
-export default BestBooks;
+export default withAuth0(BestBooks);

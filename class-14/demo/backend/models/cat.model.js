@@ -14,7 +14,8 @@ const mongoose = require('mongoose');
 const catSchema = new mongoose.Schema({
   cat_name: { type: String },
   cat_breed: { type: String },
-  cat_img: { type: String }
+  cat_img: { type: String },
+  email: { type: String }
 });
 
 

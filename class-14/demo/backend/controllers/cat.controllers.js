@@ -4,7 +4,7 @@ const catModel = require('../models/cat.model');
 
 const getCats = (request, response) => {
 
-  catModel.find((error, catsData) => {
+  catModel.find({ email: request.query.email }, (error, catsData) => {
     response.json(catsData)
   });
 
@@ -23,11 +23,11 @@ const createCat = (request, response) => {
    * 
    * }
    */
-  const { cat_name, cat_breed, cat_img } = request.body;
+  const { cat_name, cat_breed, cat_img, email } = request.body;
 
 
   const newCat = new catModel({
-    cat_name, cat_breed, cat_img
+    cat_name, cat_breed, cat_img, email
   });
 
   newCat.save();
